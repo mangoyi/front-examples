@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<style>
+		body,ul,li,div,p{
+			margin: 0;
+			padding: 0;
+		}
+		ul,li{
+			list-style: none;
+		}
+		.banner{
+			position:relative;
+			width:624px;
+			height:400px;
+			overflow:hidden;
+		}
+		.banner .list-banner{
+			position:absolute;
+			width:5000px;
+		}
+		.banner .list-banner li{
+			float:left;
+			width:624px;
+			height:400px;
+		}
+		.banner .list-num-wp{
+			position:absolute;
+			bottom:7px;
+			width:624px;
+			height:11px;
+		}
+		.banner .list-num{
+			width:100px;
+			margin:0 auto;
+		}
+		.banner .list-num a{
+			display:inline;
+			float:left;
+			width:11px;
+			height:11px;
+			margin:0 7px; 
+			background:white;
+		}
+		.banner .list-num a:hover{
+			background: orange;
+		}
+		.banner .list-num a.hover{
+			background: red;
+		}
+		.banner .left a{
+			display: block;
+			position: absolute;
+			width: 49px;
+			height: 49px;
+			top: 165px;
+			left: 4px;
+			background: orange;
+			filter: Alpha(opacity=50);
+			-moz-opacity:.5;
+			opacity: 0.5;
+		}
+		.banner .right a{
+			display:block;
+			position:absolute;
+			width:49px;
+			height:49px;
+			top:165px;
+			right:4px;
+			background:orange;
+			filter: Alpha(opacity=50);
+			-moz-opacity:.5;
+			opacity:0.5;
+		}
+	</style>
+</head>
+<body>
+	<div id="banner-wrapper">
+		<div id="banner" class="banner">
+			<ul id="list-banner" class="list-banner fn-clear" style="left:-624px">
+				<li><a href="#"><img src="images/banner4.jpg" alt="fault" width="624" height="400"></a></li>
+				<li><a href="#"><img src="images/banner1.jpg" alt="fault" width="624" height="400"></a></li>
+				<li><a href="#"><img src="images/banner2.jpg" alt="fault" width="624" height="400"></a></li>
+				<li><a href="#"><img src="images/banner3.jpg" alt="fault" width="624" height="400"></a></li>
+				<li><a href="#"><img src="images/banner4.jpg" alt="fault" width="624" height="400"></a></li>
+				<li><a href="#"><img src="images/banner1.jpg" alt="fault" width="624" height="400"></a></li>
+			</ul>
+			<div class="list-num-wp">
+				<div id="list-num" class="list-num fn-clear">
+					<a href="#" index="1" class="hover"></a>
+					<a href="#" index="2" ></a>
+					<a href="#" index="3" ></a>
+					<a href="#" index="4" ></a>
+				</div>
+			</div>
+			<div class="left">
+				<a href="#" id="left"></a>
+			</div>
+			<div class="right">
+				<a href="#" id="right"></a>
+			</div>
+		</div>
+	</div>
+	<script>
+		window.onload = function() {
+			var prev = document.getElementById('left');
+			var next = document.getElementById('right');
+			var list_banner = document.getElementById('list-banner');
+			var list_num_box = document.getElementById('list-num');
+			var list_num = list_num_box.getElementsByTagName('a');
+			next.onclick = function() {
+				animate(-624);
+				index++;
+				if(index > 4) {
+					index=1;
+				}
+				showDot();
+			}
+			prev.onclick = function() {
+				animate(624);
+				index--;
+				if(index<1) {
+					index =4;
+				}
+				showDot();
+			}
+
+			function animate(offset) {
+				animated = true;
+				var newLeft = parseInt(list_banner.style.left) + offset;
+				var time = 300;
+				var interval = 30;
+				var speed = offset/(time/interval);
+				speed= speed>0?Math.ceil(speed):Math.floor(speed);
+				function go() {
+					if((speed <0 && parseInt(list_banner.style.left) > newLeft) || (speed>0 && parseInt(list_banner.style.left)<newLeft )){
+						list_banner.style.left = parseInt(list_banner.style.left) + speed + 'px';
+						setTimeout(go, interval);
+					} else {
+						animated = false;
+						list_banner.style.left = newLeft + 'px';
+						if(newLeft <-2496) {
+							list_banner.style.left = -624 + 'px';
+						}
+						if(newLeft > 624) {
+							list_banner.style.left = -2496 + 'px';
+						}
+					}
+				}
+				go();
+			}
+
+			var index = 1;
+			function showDot() {
+				for(var i= 0; i < list_num.length; i++) {
+					list_num[i].className = "";
+				}
+				list_num[index-1].className = "hover";
+			}
+
+
+			for(var i=0; i<list_num.length; i++) {
+				list_num[i].onclick = function() {
+					if(this.className === "hover") {
+						return;
+					}
+					var myIndex = parseInt(this.getAttribute('index'));
+					var offset = -624*(myIndex - index);
+					index = myIndex;
+					animate(offset);
+					showDot();
+				}
+			}
+
+			function autoplay(){
+			    timer=setInterval(function(){
+			      next.onclick();
+			    },1000)
+			}
+			function stopautoplay(){
+			    clearInterval(timer);
+			}
+			banner.onmouseover=stopautoplay;
+			banner.onmouseout=autoplay;
+			autoplay();
+		}
+
+	</script>
+</body>
+</html>
