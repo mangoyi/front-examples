@@ -128,6 +128,10 @@
 			}
 
 			function animate(offset) {
+				if (obj.timer2) {
+					clearTimeout(obj.timer2);
+					console.log('sky')
+				}
 				animated = true;
 				var newLeft = parseInt(list_banner.style.left) + offset;
 				var time = 300;
@@ -137,7 +141,7 @@
 				function go() {
 					if((speed <0 && parseInt(list_banner.style.left) > newLeft) || (speed>0 && parseInt(list_banner.style.left)<newLeft )){
 						list_banner.style.left = parseInt(list_banner.style.left) + speed + 'px';
-						setTimeout(go, interval);
+						obj.timer2 = setTimeout(go, interval);
 					} else {
 						animated = false;
 						list_banner.style.left = newLeft + 'px';
@@ -160,7 +164,6 @@
 				list_num[index-1].className = "hover";
 			}
 
-
 			for(var i=0; i<list_num.length; i++) {
 				list_num[i].onclick = function() {
 					if(this.className === "hover") {
@@ -174,13 +177,19 @@
 				}
 			}
 
+			var obj = {};
+
 			function autoplay(){
-			    timer=setInterval(function(){
+				if (obj.timer) {
+					console.log('cichu')
+					clearInterval(obj.timer)
+				}
+			    obj.timer=setInterval(function(){
 			      next.onclick();
 			    },1000)
 			}
 			function stopautoplay(){
-			    clearInterval(timer);
+			    clearInterval(obj.timer);
 			}
 			banner.onmouseover=stopautoplay;
 			banner.onmouseout=autoplay;
